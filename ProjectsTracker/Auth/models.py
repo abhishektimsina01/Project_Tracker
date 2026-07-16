@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
     is_employee = models.BooleanField(default=True, null= False)
     is_lead = models.BooleanField(default = False, null = False)
     is_project_manager = models.BooleanField(default = False, null = False)
-    roles = models.CharField(choices=ROLES)
+    roles = models.CharField(default="member", choices=ROLES)
     created_at = models.DateTimeField(auto_now = True)
     objects = CustomUserManager()
 
