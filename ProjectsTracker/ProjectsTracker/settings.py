@@ -37,6 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    
+    # applications
+    "Activity",
+    "Auth",
+    "Comments",
+    "Dashboard",
+    "Members",
+    "Projects",
+    "Tasks",
+    "Teams"
+
 ]
 
 MIDDLEWARE = [
@@ -104,11 +116,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = "Asia/Kathmandu"
 
 USE_I18N = True
 
-USE_TZ = True
+# this will make our timezone as DateTime which is naive (no timezone)
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
