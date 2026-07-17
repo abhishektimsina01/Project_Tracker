@@ -93,48 +93,61 @@ class Refresh(APIView):
             "refresh" : refresh
         }
         serializer = MyTokenRefreshSerializer(data = data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-            access = data.get("access")
-            refresh = data.get("refresh")
-            response = Response({
-                "message" : "token refreshed"
-            })
-            response.set_cookie(
-                key = "access",
-                value=access,
-                httponly=True,
-                secure=True,
-                max_age=60*10
-            )
-            response.set_cookie(
-                key = "refresh",
-                value= refresh,
-                httponly=True,  
-                secure=True,
-                max_age=60*60*24
-            )
-            return response
-        return Response(serializer.errors)
+        try:
+            if serializer.is_valid():
+                data = serializer.validated_data
+                access = data.get("access")
+                refresh = data.get("refresh")
+                response = Response({
+                    "message" : "token refreshed"
+                })
+                response.set_cookie(
+                    key = "access",
+                    value=access,
+                    httponly=True,
+                    secure=True,
+                    max_age=60*10
+                )
+                response.set_cookie(
+                    key = "refresh",
+                    value= refresh,
+                    httponly=True,  
+                    secure=True,
+                    max_age=60*60*24
+                )
+                return response
+        except Exception as e:
+            return Response(serializer.errors)
 
 
 class LogOut(APIView):
     # permission_classes = [IsAuthenticated]
     def get(self, request):
         refresh = request.COOKIES.get("refresh")
+        if refresh == None:
+            response = Response({
+                "error" : "No refresh token found"
+            })
+            if request.COOKIES.get("access"):
+                response.delete_cookie("access")
+            return response
         data = {
             "refresh" : refresh
         }
         serializer = TokenBlacklistSerializer(data = data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-            response = Response({
+        try:
+            if serializer.is_valid():
+                data = serializer.validated_data
+                response = Response({
                 "message" : "LoggedOut"
-            })  
-            response.delete_cookie("access")
-            response.delete_cookie("refresh")
-            return response
-        return Response(serializer.errors)
+                }) 
+                response.delete_cookie("access")
+                response.delete_cookie("refresh")
+                return response
+        except Exception:
+            return Response({
+                "error" : "Invalid token"
+            })
 
 
 @api_view(['DELETE'])
