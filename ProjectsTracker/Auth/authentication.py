@@ -10,15 +10,15 @@ class CookieJWTAuthentication(JWTAuthentication):
             # ends with None
             return None
         print(access_token)
-        # validated_token = self.get_validated_token(access_token)
-        try:
-            validated_token = self.get_validated_token(access_token)
-        except Exception as e:
-            print(e.detail["messages"])
-            raise InvalidToken({
-                "details" : e.detail["messages"],
-                "error" : 'Token has expired'
-            })
+        validated_token = self.get_validated_token(access_token)
+        # try:
+        #     validated_token = self.get_validated_token(access_token)
+        # except Exception as e:
+        #     print(e.detail["messages"])
+        #     raise InvalidToken({
+        #         "details" : e.detail["messages"],
+        #         "error" : 'Token has expired'
+        #     })
         try:
             user = self.get_user(validated_token)
         except Exception as e:

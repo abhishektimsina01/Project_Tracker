@@ -11,7 +11,7 @@ from rest_framework_simplejwt.serializers import TokenBlacklistSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import CustomUserSerializer, MyTokenObtainPairSerializer, MyTokenRefreshSerializer
 from django.utils import timezone
 from datetime import datetime, timedelta
@@ -97,6 +97,8 @@ class LogIn(TokenObtainPairView):
 
 
 class Refresh(APIView):
+    authentication_classes = []
+    permission_classes = []
     def get(self, request : Request):
         # accessig the refresh token from the cookies
         refresh = request.COOKIES.get("refresh")
@@ -136,6 +138,7 @@ class Refresh(APIView):
 class LogOut(APIView):
     # permission_classes = [IsAuthenticated]
     def get(self, request):
+        print(request.user.is_authenticated)
         refresh = request.COOKIES.get("refresh")
         if refresh == None:
             response = Response({
