@@ -24,13 +24,13 @@ class CookieJWTAuthentication(JWTAuthentication):
         except Exception as e:
             print(type(e))
             print("Auth error aayo")
-            if type(e) == AuthenticationFailed:
+            if isinstance(e, AuthenticationFailed):
                 raise AuthenticationFailed({
                     "detial" : e.detail,
                     "error" : "user deos not exist"
                 })
             
-            if type(e) == InvalidToken:
+            if isinstance(e, InvalidToken):
                 raise InvalidToken({
                     "error" : "Token contained no recognizable user identification"
                 })

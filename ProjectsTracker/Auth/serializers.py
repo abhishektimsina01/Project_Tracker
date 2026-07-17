@@ -32,6 +32,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return super().get_token(user)
     
     def validate(self, attrs):
+        print("ya aayo")
         data = super().validate(attrs)
         data["user"] = {
             "id" : self.user.id,

@@ -8,7 +8,9 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin, DestroyModel
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenBlacklistSerializer
+from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from .serializers import CustomUserSerializer, MyTokenObtainPairSerializer, MyTokenRefreshSerializer
 from django.utils import timezone
@@ -61,7 +63,18 @@ class LogIn(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
     def post(self, request, *args, **kwargs):
         print(request.data)
-        response = super().post(request, *args, **kwargs)
+        print("data")
+        # response = super().post(request, *args, **kwargs)
+        try:
+            response = super().post(request, *args, **kwargs)
+            print("try garam hai ta")
+        except Exception as e:
+            print("error aayexa")
+            print(e.detail)
+            raise AuthenticationFailed({
+                "error" : e.detail
+            })
+        print("pass vhayexa")
         access = response.data.get("access")
         refresh = response.data.get("refresh")
         response.set_cookie(
@@ -80,7 +93,7 @@ class LogIn(TokenObtainPairView):
         )
         response.data.pop("access")
         response.data.pop("refresh")
-        return response
+        return response        
 
 
 class Refresh(APIView):
@@ -157,6 +170,13 @@ def deleteAllUser(request):
     print(serializer.data)
     users.delete()
     response = Response(serializer.data)
-    # response.delete_cookie("access")
-    # response.delete_cookie("refresh")
+    response.delete_cookie("access")
+    response.delete_cookie("refresh")
     return response
+
+@api_view(["GET"])
+def getAllUsers(request):
+    users = CustomUser.objects.all()
+    serializer = CustomUserSerializer(users, many = True)
+    print(serializer.data)
+    return Response(serializer.data)
