@@ -156,4 +156,7 @@ def deleteAllUser(request):
     serializer = CustomUserSerializer(users, many = True)
     print(serializer.data)
     users.delete()
-    return Response(serializer.data)
+    response = Response(serializer.data)
+    # response.delete_cookie("access")
+    # response.delete_cookie("refresh")
+    return response

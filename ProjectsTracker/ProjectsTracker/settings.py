@@ -137,7 +137,7 @@ USE_I18N = True
 STATIC_URL = 'static/'
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     # allows Refresh() to create us new refresh token
     "ROTATE_REFRESH_TOKENS": True,
