@@ -123,12 +123,12 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 # TIME_ZONE = 'UTC'
-TIME_ZONE = "Asia/Kathmandu"
+# TIME_ZONE = "Asia/Kathmandu"
 
 USE_I18N = True
 
 # this will make our timezone as DateTime which is naive (no timezone)
-# USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
