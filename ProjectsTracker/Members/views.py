@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from datetime import datetime, timedelta
+# from .models import Member
 
 from django.contrib.auth import get_user_model
 
@@ -42,4 +43,3 @@ def projectsInvolvedIn(request):
     # its hisotory
     # streaks
     pass
-

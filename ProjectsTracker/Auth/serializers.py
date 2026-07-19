@@ -10,8 +10,13 @@ class CustomUserSerializer(serializers.Serializer):
     username = serializers.CharField(required = True)
     password = serializers.CharField(required = True, write_only = True)
     email = serializers.CharField(required = True)
-    roles = serializers.CharField(required = False)
-    gender = serializers.CharField(required = False)
+    roles = serializers.ChoiceField(
+        choices=CustomUser.Role.choices,
+        required = False
+    )
+    gender = serializers.ChoiceField(
+        choices=CustomUser.Gender.choices,
+        required = True)
     created_at = serializers.DateTimeField(read_only = True)
 
     # creating the user of the class CustomUser needs the create_user
@@ -23,7 +28,7 @@ class CustomUserSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         
         instance.save()
-        return 
+        return
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
