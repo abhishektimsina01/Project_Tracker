@@ -6,25 +6,42 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from datetime import datetime, timedelta
-# from .models import Member
-
+from .models import Member
+from .serializers import MemberSerializer
+from .permisions import IsMember, IsPM
 from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
 
 # Create your views here.
 
+# create the employee
+# to create the employee, the user should be the pm
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsPM])
+def createMember(request):
+    print(request.data)
+    serializer = MemberSerializer(data = request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors)
+    serializer.save()
+    print(serializer.data)
+    return Response(serializer.data)
+
+
 #get own profile
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsMember])
 def getOwnProfile(request):
-    request.method
-    print(request.user.id)
-    print(request.user.username)
-    print(request.user.roles)
-    return Response({
-        "data" : request.method
-    })
+    user = Member.objects.get(user_id = request.user.id)
+    serializer = MemberSerializer(user)
+    required_fields = ["id", "username", "roles"]
+    items = list(serializer.data["user"].keys())
+    if serializer.data.get("user"):
+        for key in items:
+            if key not in required_fields and key in serializer.data["user"]:
+                serializer.data["user"].pop(key)
+    return Response(serializer.data)
 
 
 # check for the task assigned
