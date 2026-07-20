@@ -14,7 +14,6 @@ class MemberSerializer(serializers.Serializer):
     department = serializers.ChoiceField(choices= Member.Department.choices, required = True)
     role = serializers.ChoiceField(choices= Member.Role.choices, required = False)
     user_id = serializers.PrimaryKeyRelatedField(write_only = True, queryset =CustomUser.objects.all())
-    user = CustomUserSerializer(source = "user_id", read_only = True)
     created_at = serializers.DateTimeField(read_only = True)
 
     def create(self, validated_data):
@@ -26,3 +25,7 @@ class MemberSerializer(serializers.Serializer):
         # make changes here not now
         instance.save()
         return instance
+
+
+class MemberUserSerializer(MemberSerializer):
+    user = CustomUserSerializer(source = "user_id", read_only = True)

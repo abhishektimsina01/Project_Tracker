@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from datetime import datetime, timedelta
 from .models import Member
-from .serializers import MemberSerializer
+from .serializers import MemberSerializer, MemberUserSerializer
 from .permisions import IsMember, IsPM
 from django.contrib.auth import get_user_model
 
@@ -34,7 +34,7 @@ def createMember(request):
 @permission_classes([IsAuthenticated, IsMember])
 def getOwnProfile(request):
     user = Member.objects.get(user_id = request.user.id)
-    serializer = MemberSerializer(user)
+    serializer = MemberUserSerializer(user)
     required_fields = ["id", "username", "roles"]
     items = list(serializer.data["user"].keys())
     if serializer.data.get("user"):
