@@ -6,7 +6,12 @@ from .models import Member
 from django.contrib.auth import get_user_model
 CustomUser = get_user_model()
 
-class MemberSerializer(serializers.Serializer):
+# this serializer contains all the base of our basemodel
+class BaseSerializer(serializers.Serializer):
+    pass
+
+# this is for the model serializer
+class MemberSerializer(BaseSerializer):
 
     member_id = serializers.UUIDField(required = False)
     name = serializers.CharField(required = False)
@@ -27,5 +32,16 @@ class MemberSerializer(serializers.Serializer):
         return instance
 
 
+# this is for the member with the user populated
 class MemberUserSerializer(MemberSerializer):
     user = CustomUserSerializer(source = "user_id", read_only = True)
+
+
+# this is for the lead model
+class LeadSerializer(BaseSerializer):
+    pass
+
+
+# this is for the project manager model
+class ProjectManagerSerializer(BaseSerializer):
+    pass
