@@ -48,12 +48,20 @@ class Member(AbstractRoleModel):
 
 
 # class Lead(AbstractRoleModel):
-
 #     lead_id = models.UUIDField(primary_key=True, default = uuid.uuid4)
+#     user_id = models.OneToOneField(
+#         settings.AUTH_USER_MODEL,
+#         on_delete=models.CASCADE,
+#         related_name="lead"
+#     )
 
 
-# # it has the M : M relation with the project as mutliple pm can get involved with multiple projects
-# # M : M relation with the team as the same reason
+# # # it has the M : M relation with the project as mutliple pm can get involved with multiple projects
+# # # M : M relation with the team as the same reason
 # class ProjectManager(AbstractRoleModel):
-
 #     pm_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+#     user_id = models.OneToOneField(
+#         settings.AUTH_USER_MODEL,
+#         on_delete=models.CASCADE,
+#         related_name="pm"
+#     )

@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Member
 from Auth.serializers import CustomUserSerializer
-from .models import Member
 
 from django.contrib.auth import get_user_model
 CustomUser = get_user_model()
@@ -35,7 +34,6 @@ class MemberSerializer(BaseSerializer):
 # this is for the member with the user populated
 class MemberUserSerializer(MemberSerializer):
     user = CustomUserSerializer(source = "user_id", read_only = True)
-
 
 # this is for the lead model
 class LeadSerializer(BaseSerializer):

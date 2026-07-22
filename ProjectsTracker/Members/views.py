@@ -34,20 +34,12 @@ def createMember(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsMember])
 def getOwnProfile(request):
-    # this makes the query of selecting the user from the CustomUser 
-    main_user = CustomUser.objects.get(id = request.user.id)
-    print(isinstance(main_user, CustomUser))
-    # this allows us to access the member from the Member table but,
-    # this again makes extra queries to access the member account and
-    # it makes the query to fetch all the members, whose user_id is request.user.id
-    # member is the object/instance of Member model
-    member = main_user.member
-    print(isinstance(member, Member))
-    user_serializer = MemberSerializer(member)
-    main_user = user_serializer.data
-    print(main_user)    
-    print("="*100)
-    user = Member.objects.get(user_id = request.user.id)
+    try:
+        user = Member.objects.get(user_id = request.user.id)
+    except Member.DoesNotExist:
+        return Response({
+            "error" : "User is not the member yet"
+        })
     serializer = MemberUserSerializer(user)
     required_fields = ["id", "username", "roles"]
     items = list(serializer.data["user"].keys())
@@ -57,13 +49,6 @@ def getOwnProfile(request):
                 serializer.data["user"].pop(key)
     return Response(serializer.data)
 
-
-# check for the task assigned
-@api_view(['GET'])
-@permission_classes([])
-def assignedTask(request):
-    # all the assigned task to the employee
-    pass
 
 #
 @api_view(['GET'])
