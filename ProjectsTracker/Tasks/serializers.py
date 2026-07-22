@@ -32,3 +32,6 @@ class BasicTaskSerializer(serializers.Serializer):
 class AssignedByAndToContainedTask(BasicTaskSerializer):
     assigned_to_data = MemberSerializer(source = "assigned_to", read_only = True)
     assigned_by_data = MemberSerializer(source = "assigned_by", read_only = True)
+
+class MemberTaskSerializer(serializers.Serializer):
+    assignedToTask = BasicTaskSerializer(many = True, read_only = True)
