@@ -30,16 +30,13 @@ class MemberSerializer(BaseSerializer):
         instance.save()
         return instance
 
-
 # this is for the member with the user populated
 class MemberUserSerializer(MemberSerializer):
     user = CustomUserSerializer(source = "user_id", read_only = True)
 
-# this is for the lead model
-class LeadSerializer(BaseSerializer):
-    pass
 
-
-# this is for the project manager model
-class ProjectManagerSerializer(BaseSerializer):
-    pass
+class BasicMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Member
+        fields = ["member_id", "name", "role"]
+        read_only_fields = ["member_id", "name", "role"]
