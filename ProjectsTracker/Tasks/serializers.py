@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import TaskModel
 from Members.models import Member
-from Members.serializers import MemberSerializer
+from Members.serializers import MemberSerializer, BasicMemberSerializer
 
 # making the basic serializer
 class BasicTaskSerializer(serializers.Serializer):
@@ -22,7 +22,6 @@ class BasicTaskSerializer(serializers.Serializer):
         # logic to add if i just want to do something with the data before the creation
         return TaskModel.objects.create(**validated_data)
     
-
     def update(self, instance, validated_data):
         instance.save()
         return instance
@@ -30,8 +29,11 @@ class BasicTaskSerializer(serializers.Serializer):
 
 # if the data of the assigned by and to member data required then used
 class AssignedByAndToContainedTask(BasicTaskSerializer):
-    assigned_to_data = MemberSerializer(source = "assigned_to", read_only = True)
-    assigned_by_data = MemberSerializer(source = "assigned_by", read_only = True)
+    assigned_to_data = BasicMemberSerializer(source = "assigned_to", read_only = True)
+    assigned_by_data = BasicMemberSerializer(source = "assigned_by", read_only = True)
 
-class MemberTaskSerializer(serializers.Serializer):
-    assignedToTask = BasicTaskSerializer(many = True, read_only = True)
+class AssignedToContainedTask(BasicTaskSerializer):
+    assigned_to_data = BasicMemberSerializer(source = "assigned_to", read_only = True)
+
+class AssignedByContainedTask(BasicTaskSerializer):
+    assigned_by_data = BasicMemberSerializer(source = "assigned_by", read_only = True)
